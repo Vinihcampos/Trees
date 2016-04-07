@@ -12,8 +12,9 @@ struct Node{
 	Node * left;
 	Node * right;
 	bool visited;
+	int height;
 
-	Node() : key{0}, left{nullptr}, right{nullptr}, visited{false}{}
+	Node() : key{0}, left{nullptr}, right{nullptr}, visited{false}, height{0}{}
 };
 
 /**
@@ -22,6 +23,14 @@ struct Node{
 template <typename T>
 void visitar_raiz(Node<T> * node){
 	cout << node->data << " ";
+}
+
+/**
+*	Método que visita o nó e imprime seu conteudo e sua altura
+**/
+template <typename T>
+void visitar_raiz_com_altura(Node<T> * node){
+	cout << node->data << " - Height: " << node->height << endl;
 }
 
 /**
@@ -169,6 +178,41 @@ void pos_ordem_iterativa(Node<T> * node){
 	}
 }
 
+/**
+*	Percorre a árvore em níveis
+**/
+template <typename T>
+void percorre_em_nivel(Node<T> * node){
+	queue<Node<T>*> niveis;
+	niveis.push(node);
+	while(niveis.size() > 0){
+		visitar_raiz(niveis.front());
+		if(niveis.front()->left != nullptr) niveis.push(niveis.front()->left);
+		if(niveis.front()->right != nullptr) niveis.push(niveis.front()->right);
+		niveis.pop();
+	}
+}
+
+/**
+*	Calcula a altura de cada nó
+**/
+template < typename T>
+int calcula_altura_nos(Node<T> * node){
+	if(node != nullptr){
+		int height = 0;
+		if(node->left != nullptr){
+			node->height = calcula_altura_nos(node->left);
+		}
+		if(node->right != nullptr){
+			int temp = calcula_altura_nos(node->right);
+			if(temp > node->height) node->height = temp;
+		}
+		node->height++;
+		visitar_raiz_com_altura(node);
+		return node->height;
+	}
+}
+
 int main(){
 
 	Node<string> * a = new Node<string>();
@@ -213,7 +257,14 @@ int main(){
 
 	cout<<"Pós-ordem: ";
 	pos_ordem_iterativa(a);
-	cout<<endl;		
+	cout<<endl;
+
+	cout<<"Hight's tree\n";
+	calcula_altura_nos(a);
+
+	cout<<"Em nível: ";
+	percorre_em_nivel(a);
+	cout<<endl;
 
 	return 0;
 }	
