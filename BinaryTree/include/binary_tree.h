@@ -27,6 +27,8 @@ class BinaryTree{
 		void pos_order_recursive(Node * _node);
 		void search_by_level(Node * _node);
 		int calculate_height(Node * _node);
+		Node * next(int _key, Node * _node, Node * _aux);
+		Node * previous(int _key, Node * _node, Node * _aux);
 
 	public:
 
@@ -90,7 +92,17 @@ class BinaryTree{
 		/**
 		*	Calculate the height of each node of tree
 		**/
-		int calculate_height() { calculate_height(node); }
+		int calculate_height() { return calculate_height(node); }
+
+		/**
+		*	Search the next node of pivot
+		**/
+		Node * next(int _key) { Node * _aux = nullptr; return next(_key, node, _aux); };
+
+		/**
+		*	Search the next node of pivot
+		**/
+		Node * previous(int _key) { Node * _aux = nullptr; return previous(_key, node, _aux); };
 };
 
 #include "../src/binary_tree.inl"

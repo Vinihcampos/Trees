@@ -17,7 +17,7 @@ BinaryTree<T>::~BinaryTree(){
 template < typename T >
 typename BinaryTree<T>::Node * BinaryTree<T>::search(int _key){
 	Node * _node = node;
-	while(_node->key != _key && _node != nullptr){
+	while(_node != nullptr && _node->key != _key){
 		if(_key > _node->key){
 			_node = _node->right;
 		}else if(_key < _node->key){
@@ -119,3 +119,45 @@ int BinaryTree<T>::calculate_height(Node * _node){
 	visite_node(_node);
 	return _node->height;
 }
+
+template < typename T >
+typename BinaryTree<T>::Node * BinaryTree<T>::next(int _key, Node * _node, Node * _aux){
+	if(_key > _node->key){
+		if(_node->right == nullptr){
+			if(_aux == nullptr) return _node;
+			else return _aux;
+		}else return next(_key, _node->right, _aux);
+	}else if(_key < _node->key){
+		_aux = _node;
+		if(_node->left == nullptr) {
+			if(_aux == nullptr) return _node;
+			else return _aux;
+		}else return next(_key, _node->left, _aux);
+	}else{
+		if(_node->right == nullptr){
+			if(_aux == nullptr) return _node;
+			else return _aux;
+		}else return next(_key, _node->right, _aux);
+	}
+}
+
+template < typename T >
+typename BinaryTree<T>::Node * BinaryTree<T>::previous(int _key, Node * _node, Node * _aux){
+	if(_key > _node->key){
+		_aux = _node;
+		if(_node->right == nullptr){
+			if(_aux == nullptr) return _node;
+			else return _aux;
+		}else return previous(_key, _node->right, _aux);
+	}else if(_key < _node->key){
+		if(_node->left == nullptr) {
+			if(_aux == nullptr) return _node;
+			else return _aux;
+		}else return previous(_key, _node->left, _aux);
+	}else{
+		if(_node->left == nullptr){
+			if(_aux == nullptr) return _node;
+			else return _aux;
+		}else return previous(_key, _node->left, _aux);
+	}
+} 

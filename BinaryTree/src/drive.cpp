@@ -15,9 +15,13 @@ int main(){
 	bt.insert(50, 50);
 	bt.insert(60, 60);
 
+	bt.simetric_order_recursive();
+
 	cout << "Height tree: " << bt.calculate_height() << endl;
 
-	cout << bt.search(100)->info << endl;
+	cout << bt.search(30)->info << endl;
+
+	cout << bt.previous(45)->key << endl;
 
 	return 0;
 }
