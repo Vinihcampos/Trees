@@ -29,6 +29,7 @@ class BinaryTree{
 		int calculate_height(Node * _node);
 		Node * next(int _key, Node * _node, Node * _aux);
 		Node * previous(int _key, Node * _node, Node * _aux);
+		void transplant(Node * previous, Node * current, Node * pivot);
 
 	public:
 
@@ -52,7 +53,7 @@ class BinaryTree{
 		/**
 		*	Remove one element of tree
 		**/
-		void remove(Node & node);
+		void remove(int _key);
 
 		/**
 		*	Search an element
@@ -103,6 +104,11 @@ class BinaryTree{
 		*	Search the next node of pivot
 		**/
 		Node * previous(int _key) { Node * _aux = nullptr; return previous(_key, node, _aux); };
+
+		/**
+		*	Search the max key of 
+		**/
+		Node * max(Node * _node, Node * previous);
 };
 
 #include "../src/binary_tree.inl"
