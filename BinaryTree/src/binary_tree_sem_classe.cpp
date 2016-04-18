@@ -13,15 +13,28 @@ struct Node{
 	Node * right;
 	bool visited;
 	int height;
+	int descendants;
 
-	Node() : key{0}, left{nullptr}, right{nullptr}, visited{false}, height{0}{}
+	Node() : key{0}, left{nullptr}, right{nullptr}, visited{false}, height{0}, descendants{0}{}
+};
+
+template <typename T>
+struct NodeG{
+	int key;
+	T data;
+	NodeG * child;
+	NodeG * next;
+	bool visited;
+	int height;
+
+	NodeG() : key{0}, child{nullptr}, next{nullptr}, visited{false}, height{0}{}
 };
 
 /**
 *	Método que visita o nó e imprime seu conteudo
 **/
 template <typename T>
-void visitar_raiz(Node<T> * node){
+void visitar_raiz(NodeG<T> * node){
 	cout << node->data << " ";
 }
 
@@ -30,7 +43,7 @@ void visitar_raiz(Node<T> * node){
 **/
 template <typename T>
 void visitar_raiz_com_altura(Node<T> * node){
-	cout << node->data << " - Height: " << node->height << endl;
+	cout << node->data << " - Descendants: " << node->descendants << endl;
 }
 
 /**
@@ -39,7 +52,7 @@ void visitar_raiz_com_altura(Node<T> * node){
 template <typename T>
 void pre_ordem_recursiva(Node<T> * node){
 	if(node != nullptr){
-		visitar_raiz(node);
+		visitar_raiz_com_altura(node);
 
 		if(node->left != nullptr){
 			pre_ordem_recursiva(node->left);
@@ -213,6 +226,78 @@ int calcula_altura_nos(Node<T> * node){
 	}
 }
 
+/**
+*	Percorre a árvore m-ária usando o método de pré-ordem (RECURSIVO) 
+**/
+template < typename T >
+void pre_ordem_maria_recursiva(NodeG<T> * node){
+	visitar_raiz(node);
+	if(node->child != nullptr) pre_ordem_maria_recursiva(node->child);
+	if(node->next != nullptr) pre_ordem_maria_recursiva(node->next);
+}
+
+/**
+*	Percorre a árvore m-ária usando o método de pré-ordem (ITERATIVO) 
+**/
+template <typename T>
+void pre_ordem_maria_iterativa(NodeG<T> * node){
+	stack<NodeG<T>*> pilha;
+	pilha.push(node);
+	while(!pilha.empty()){
+		node = pilha.top();
+		pilha.pop();
+		visitar_raiz(node);
+		if(node->next != nullptr)
+			pilha.push(node->next);
+		if(node->child != nullptr)
+			pilha.push(node->child);		
+	}
+}
+
+/**
+*	Percorre a árvore m-ária em nível
+**/
+template < typename T >
+void percorre_em_nivel_maria(NodeG<T> * node){
+	int x;
+	queue<NodeG<T>*> arvore;
+	arvore.push(node);
+	while(!arvore.empty()){
+		visitar_raiz(arvore.front());
+
+		NodeG<T> * _temp = nullptr;
+		if(arvore.front()->child != nullptr) {
+			arvore.push(arvore.front()->child);
+			_temp = arvore.front()->child->next;
+		}
+
+		while(_temp != nullptr){
+			arvore.push(_temp);
+			_temp = _temp->next;
+		}
+		
+		delete _temp;		
+		arvore.pop();
+	}
+}
+
+/**
+*	Calculate the number of descendants (BINARY TREE)
+**/
+template <typename T>
+int calcula_descendentes(Node<T> * node){
+	if(node != nullptr){
+		node->descendants  = node->left != nullptr ? 1 + calcula_descendentes(node->left) : 0;
+		node->descendants += node->right != nullptr ? 1 + calcula_descendentes(node->right) : 0;
+
+		cout<<node->data<<": "<<node->descendants<<endl;
+
+		return node->descendants;
+	}else{
+		return 0;
+	}
+}
+
 int main(){
 
 	Node<string> * a = new Node<string>();
@@ -224,6 +309,7 @@ int main(){
 	Node<string> * h = new Node<string>();
 	Node<string> * i = new Node<string>();
 	Node<string> * j = new Node<string>();
+	
 	a->data = "a";
 	b->data = "b";
 	c->data = "c";
@@ -247,8 +333,8 @@ int main(){
 
 	f->left = i;
 
-	cout<<"Pré-ordem: ";
-	pre_ordem_iterativa(a);
+	/*cout<<"Pré-ordem: ";
+	pre_ordem_recursiva(a);
 	cout<<endl;
 
 	cout<<"Ordem simétrica: ";
@@ -264,7 +350,47 @@ int main(){
 
 	cout<<"Em nível: ";
 	percorre_em_nivel(a);
+	cout<<endl;*/
+
+	/*NodeG<string> * a = new NodeG<string>();
+	NodeG<string> * b = new NodeG<string>();
+	NodeG<string> * c = new NodeG<string>();
+	NodeG<string> * d = new NodeG<string>();
+	NodeG<string> * e = new NodeG<string>();
+	NodeG<string> * f = new NodeG<string>();
+	NodeG<string> * m = new NodeG<string>();
+	NodeG<string> * i = new NodeG<string>();
+	NodeG<string> * j = new NodeG<string>();
+	NodeG<string> * t = new NodeG<string>();
+
+	a->data = "a";
+	b->data = "b";
+	c->data = "c";
+	d->data = "d";
+	e->data = "e";
+	f->data = "f";
+	m->data = "m";
+	i->data = "i";
+	j->data = "j";
+	t->data = "t";
+
+	b->child = d;
+	d->next = t;
+	d->child = e;
+	e->child = m;
+	e->next = f;
+	f->next = j;
+
+	t->child = c;
+	c->next = i;
+	i->child = a;
+
+	pre_ordem_maria_iterativa(b);
 	cout<<endl;
+	pre_ordem_maria_iterativa(b);
+	cout<<endl;*/
+
+	calcula_descendentes(a);
 
 	return 0;
 }	

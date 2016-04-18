@@ -1,7 +1,9 @@
 #ifndef _BINARY_TREE_
 #define _BINARY_TREE_
 
+#include <utility>
 #include <iostream>
+using namespace std;
 
 template < typename T >
 class BinaryTree{
@@ -108,7 +110,17 @@ class BinaryTree{
 		/**
 		*	Search the max key of 
 		**/
-		Node * max(Node * _node, Node * previous);
+		Node * max(Node * _node, Node * previous = nullptr);
+
+		/**
+		*	Search the max key of 
+		**/
+		int max_key();
+
+		/**
+		*	Insert list
+		**/
+		void insertList(pair<int, T> * list, int l, int h);
 };
 
 #include "../src/binary_tree.inl"

@@ -1,6 +1,7 @@
 #include "binary_tree.h"
 #include <iostream>
 #include <queue>
+#include <utility>
 
 using namespace std;
 
@@ -162,7 +163,7 @@ void BinaryTree<T>::remove(int _key){
 
 template <typename T>
 void BinaryTree<T>::visite_node(Node *_node){
-	cout << _node->info << " ";
+	cout << _node->key << " ";
 }
 
 template <typename T>
@@ -276,3 +277,23 @@ typename BinaryTree<T>::Node * BinaryTree<T>::max(Node * _node, Node * previous)
 
 	return _temp;
 }
+
+template < typename T >
+int BinaryTree<T>::max_key(){
+	Node * _temp = node;
+	while(_temp->right != nullptr) _temp = _temp->right;
+	
+	int key = _temp->key; 
+
+	return key;
+}
+
+template < typename T >
+void BinaryTree<T>::insertList(pair<int, T> * list, int l, int h){
+	if(l <= h){
+		int med = (l + h)/2;
+		insert(list[med].first, list[med].second);
+		insertList(list, l, med - 1);
+		insertList(list, med + 1, h);
+	}
+} 
